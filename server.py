@@ -1,10 +1,8 @@
 
 
 
-from flask import Flask, render_template, request
-#import nltk
-#import numpy as np
-#import random
+from flask import Flask, render_template, request,jsonify
+
 
 from tensorflow.keras.models import load_model
 
@@ -21,7 +19,7 @@ from tensorflow.keras.layers import Dense
 app = Flask(__name__)
 
 
-
+model = load_model('my_model.h5')
 
 
 #training phases below
@@ -31,29 +29,15 @@ app = Flask(__name__)
 
 #testing phase below  (run this code everytime, donot run the whole code)
 
-def predict():
-  classifier = Sequential()
-  classifier.add(Conv2D(32, (3, 3), input_shape = (64, 64, 3), activation = 'relu'))
-  classifier.add(MaxPooling2D(pool_size=(2, 2)))
-  classifier.add(Conv2D(32, (3, 3), activation = 'relu'))
-  classifier.add(MaxPooling2D(pool_size=(2, 2)))
-  classifier.add(Flatten())
-  classifier.add(Dense(units = 1, activation = 'sigmoid'))
-  classifier.compile(optimizer='adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-  from tensorflow.keras.preprocessing.image import ImageDataGenerator
-  train_datagen = ImageDataGenerator(rescale = 1. / 255, shear_range = 0.2, zoom_range = 0.2, horizontal_flip = True)
-  test_datagen = ImageDataGenerator(rescale = 1. / 255)
-  training_set = train_datagen.flow_from_directory('models/training_set', target_size = (64, 64), batch_size = 8, class_mode = 'binary')
-  test_set = test_datagen.flow_from_directory('models/test_set', target_size = (64, 64), batch_size = 8, class_mode = 'binary')
-  classifier.fit_generator(training_set, steps_per_epoch  = 24, epochs = 2, validation_data = test_set, validation_steps = 1000)
 
+@app.route('/', methods=['GET', 'POST'])
+def calls():
   import numpy as np
   from tensorflow.keras.preprocessing import image
-  test_image = image.load_img('models/sample3.jpg', target_size = (64, 64))   #file to be predicted imagename
+  test_image = image.load_img('sample4.png', target_size = (64, 64))   #file to be predicted imagename
   test_image = image.img_to_array(test_image)
   test_image = np.expand_dims(test_image, axis = 0)
-  result = classifier.predict(test_image)
-  print(training_set.class_indices)
+  result = model.predict(test_image)
   print(result)
   global prediction
   if result[0][0] == 0:
@@ -71,15 +55,12 @@ def predict():
 
 
 #define app routes
-@app.route("/")
-def index():
-    return render_template("index.html")
+#@app.route("/")
+#def index():
+#    return render_template("index.html")
 
 
-@app.route('/CNN', methods=['POST'])
-def calls():
-    ans=predict()
-    return ans
+    
    # return render_template("index.html")
 
 
