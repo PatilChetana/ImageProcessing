@@ -18,5 +18,5 @@ tb-nightly==2.2.0a20200106
 tensorboard==2.1.0
 tensorflow==1.14.0
 tensorflow-estimator==2.1.0
-
+Werkzeug==1.0.0
 setuptools==41.0.0
