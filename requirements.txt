@@ -16,7 +16,7 @@ request==2019.4.13
 
 tb-nightly==2.2.0a20200106
 tensorboard==1.14.0
-tensorflow==1.14.0
+tensorflow==2.7.2
 tensorflow-estimator==1.14.0
 Werkzeug==1.0.0
 h5py==2.10.0
